@@ -54,6 +54,15 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
+---- Яркость
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.spawn("brightnessctl s 5%+") end)
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.spawn("brightnessctl s 5%-") end)
+
+    -- Громкость
+    awful.key({ }, "XF86AudioRaiseVolume", function () awful.spawn("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+") end)
+    awful.key({ }, "XF86AudioLowerVolume", function () awful.spawn("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-") end)
+    awful.key({ }, "XF86AudioMute", function () awful.spawn("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle") end)
+--
 -- TouchBar Tap-to-Click
 
   awful.spawn.with_shell("xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Tapping Enabled' 1") 
@@ -63,7 +72,7 @@ modkey = "Mod4"
 
 -- Menu Aps
   Browser = 'zen-browser'
-  Browser = 'firefox'
+  Browser2 = 'firefox'
   DevBrowser = 'chromium'
   terminal = "kitty"
   editor = os.getenv("EDITOR") or "nano"
@@ -263,7 +272,7 @@ globalkeys = gears.table.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
+    awful.key({ modkey,           }, "`", function () mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
@@ -277,31 +286,25 @@ globalkeys = gears.table.join(
               {description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
-    awful.key({ modkey,           }, "Tab",
-        function ()
-            awful.client.focus.history.previous()
-            if client.focus then
-                client.focus:raise()
-            end
-        end,
-        {description = "go back", group = "client"}),
 
     -- Standard program
-    awful.key({ modkey,           }, "t", function () awful.spawn(terminal) end,
+    awful.key({ modkey}, "t", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
   
-    awful.key({ modkey}, "b", function() awful.spawn(Browser) end,
+    awful.key({ modkey}, "w", function() awful.spawn(Browser) end,
               {description = "open main brouser", group = "launcher"}),
 
-    awful.key({ modkey, "Shift" }, "b", function() awful.spawn(Browser2) end,
+    awful.key({ modkey, "Shift" }, "w", function() awful.spawn(Browser2) end,
               {description = "open two brouser", group = "launcher"}),
     
-    awful.key({ modkey, "Mod1" }, "b", function() awful.spawn(Devbrouser) end,
-              {description = "open two brouser", group = "launcher"}),
+    awful.key({ modkey, "Mod1" }, "w", function() awful.spawn(DevBrowser) end,
+              {description = "open dev brouser", group = "launcher"}),
+    awful.key({modkey}, "c", function() awful.spawn(IDE) end,
+              {description = "My IDE", group= "launcher"}),
    --
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit,
+    awful.key({ modkey, "Shift"   }, "Delete", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
@@ -316,9 +319,9 @@ globalkeys = gears.table.join(
               {description = "increase the number of columns", group = "layout"}),
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
-    awful.key({ modkey,           }, "space", function () awful.layout.inc( 1)                end,
+    awful.key({ modkey,           }, "Tab", function () awful.layout.inc( 1)                end,
               {description = "select next", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
+    awful.key({ modkey, "Shift"   }, "Tab", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
 
     awful.key({ modkey, "Control" }, "n",
@@ -359,7 +362,7 @@ clientkeys = gears.table.join(
             c:raise()
         end,
         {description = "toggle fullscreen", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
+    awful.key({ modkey, "Shift"   }, "q",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
