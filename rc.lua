@@ -75,7 +75,7 @@ modkey = "Mod4"
   Browser2 = 'firefox'
   DevBrowser = 'chromium'
   terminal = "kitty"
-  editor = os.getenv("EDITOR") or "nano"
+  editor = os.getenv("EDITOR") or "vim"
   editor_cmd = terminal .. " -e " .. editor
   IDE = "code"
 -- Table of layouts to cover with awful.layout.inc, order matters.
@@ -249,7 +249,7 @@ root.buttons(gears.table.join(
 -- {{{ Key bindings
 globalkeys = gears.table.join(
   -- Swidch keyboard
-  awful.key({ "Mod1" }, " ", function () mykeyboardlayout.next_layout(); end),
+  awful.key({ modkey }, " ", function () mykeyboardlayout.next_layout(); end),
   --
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
