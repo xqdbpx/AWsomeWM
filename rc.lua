@@ -15,6 +15,8 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
+-- Menu Aps Init
+local config = require("config")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
@@ -55,12 +57,12 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
 ---- Яркость
-    awful.key({modkey}, "F2", function () awful.spawn("brightnessctl s 5%+") end)
-    awful.key({modkey}, "F1", function () awful.spawn("brightnessctl s 5%-") end)
+    awful.key({modkey}, "F2", function () awful.with_shell("brightnessctl s 5%+") end)
+    awful.key({modkey}, "F1", function () awful.with_shell("brightnessctl s 5%-") end)
 
     -- Volume 
-    awful.key({modkey}, "F3", function () awful.spawn("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+") end)
-    awful.key({modkey}, "F4", function () awful.spawn("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-") end)
+    awful.key({modkey}, "F3", function () awful.with_shell("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+") end)
+    awful.key({modkey}, "F4", function () awful.with_shll("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-") end)
     awful.key({modkey, "Mod1"}, "m", function () awful.spawn("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle") end)
 --
 -- TouchBar Tap-to-Click
@@ -69,16 +71,8 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 -- and 
 -- 
 modkey = "Mod4"
-
--- Menu Aps
-  Browser = 'zen-browser'
-  Browser2 = 'firefox'
-  DevBrowser = 'chromium'
-  terminal = "kitty"
-  editor = os.getenv("EDITOR") or "vim"
-  editor_cmd = terminal .. " -e " .. editor
-  Anky = "anky"
-  IDE = "code"
+  --Menu apps
+  local apps = config.apps
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
     awful.layout.suit.floating,
@@ -104,14 +98,14 @@ awful.layout.layouts = {
 -- Create a launcher widget and a main menu
 myawesomemenu = {
    { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
+   { "manual", apps.Terminal .. " -e man awesome" },
+   { "edit config", apps.Editor_cmd .. " " .. awesome.conffile },
    { "restart", awesome.restart },
    { "quit", function() awesome.quit() end },
 }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
+                                    { "open terminal", apps.Terminal }
                                   }
                         })
 
@@ -119,7 +113,7 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
 
 -- Menubar configuration
-menubar.utils.terminal = terminal -- Set the terminal for applications that require it
+menubar.utils.terminal = apps.Terminal -- Set the terminal for applications that require it
 -- }}}
 
 -- Keyboard map indicator and switcher
@@ -290,13 +284,13 @@ globalkeys = gears.table.join(
               {description = "jump to urgent client", group = "client"}),
 
     -- Standard program
-    awful.key({ modkey}, "t", function () awful.spawn(terminal) end,
+    awful.key({ modkey}, "t", function () awful.spawn(apps.Terminal) end,
               {description = "open a terminal", group = "launcher"}),
   
-    awful.key({ modkey}, "w", function() awful.spawn(Browser) end,
+    awful.key({ modkey}, "w", function() awful.spawn(apps.Browser) end,
               {description = "open main brouser", group = "launcher"}),
 
-    awful.key({ modkey, "Shift" }, "w", function() awful.spawn(Browser2) end,
+    awful.key({ modkey, "Shift" }, "w", function() awful.spawn(apps.Browser2) end,
               {description = "open two brouser", group = "launcher"}),
     
     awful.key({ modkey, "Mod1" }, "w", function() awful.spawn(DevBrowser) end,
