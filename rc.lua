@@ -56,20 +56,10 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
----- Яркость
-    awful.key({modkey}, "F2", function () awful.with_shell("brightnessctl s 5%+") end)
-    awful.key({modkey}, "F1", function () awful.with_shell("brightnessctl s 5%-") end)
-
-    -- Volume 
-    awful.key({modkey}, "F3", function () awful.with_shell("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+") end)
-    awful.key({modkey}, "F4", function () awful.with_shll("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-") end)
-    awful.key({modkey, "Mod1"}, "m", function () awful.spawn("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle") end)
---
 -- TouchBar Tap-to-Click
 
   awful.spawn.with_shell("xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Tapping Enabled' 1") 
--- and 
--- 
+-- Mod key
 modkey = "Mod4"
   --Menu apps
   local apps = config.apps
@@ -244,9 +234,16 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-  -- Swidch keyboard
-  awful.key({ modkey }, " ", function () mykeyboardlayout.next_layout(); end),
-  --
+-- Swidch keyboard
+    awful.key({ modkey }, " ", function () mykeyboardlayout.next_layout(); end),
+-- Screen Light 
+    awful.key({ "Shift" }, "XF86AudioRaiseVolume", function () awful.spawn.with_shell("brightnessctl s 11%+") end),
+    awful.key({ "Shift" }, "XF86AudioLowerVolume", function ()  awful.spawn.with_shell("brightnessctl s 11%-") end),
+-- Volume 
+    awful.key({ }, "XF86AudioRaiseVolume", function () awful.spawn.with_shell("wpctl set-volume @DEFAULT_SINK@ 12%+") end),
+    awful.key({ }, "XF86AudioLowerVolume", function () awful.spawn.with_shell("wpctl set-volume @DEFAULT_SINK@ 12%-") end),
+    awful.key({modkey, "Mod1"}, "m", function () awful.spawn("wpctl set-mute @DEFAULT_SINK@ toggle") end),
+    --
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey, "Shift"   }, "h",   awful.tag.viewprev,
