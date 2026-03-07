@@ -8,6 +8,7 @@ local awful = require("awful")
 require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
+local statusbar = require("bar")
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Notification library
@@ -44,6 +45,17 @@ do
     end)
 end
 -- }}}
+-- add utisl class 
+local utils = config.utils
+-- AutoRunScrypt for utils{
+function first_run(cmd)
+  local findme = cmd:match("%S+")
+  awful.spawn.with_shell(string.format("pgrep -u $USER -x %s > /dev/null || (%s)", findme, cmd))
+end
+--AutoRun utils and app
+first_run(utils.keyboard)
+first_run(utils.gestures)
+-- }
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
@@ -106,14 +118,12 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 menubar.utils.terminal = apps.Terminal -- Set the terminal for applications that require it
 -- }}}
 
--- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock()
+mytextclock = wibox.widget.textclock("%H:%M")
 
--- Create a wibox for each screen and add it
+-- Create a wibox for each screen and add it !!!
 local taglist_buttons = gears.table.join(
                     awful.button({ }, 1, function(t) t:view_only() end),
                     awful.button({ modkey }, 1, function(t)
@@ -171,7 +181,7 @@ screen.connect_signal("property::geometry", set_wallpaper)
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
-
+    statusbar.setup(s)
     -- Each screen has its own tag table.
     awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 
@@ -198,29 +208,6 @@ awful.screen.connect_for_each_screen(function(s)
         filter  = awful.widget.tasklist.filter.currenttags,
         buttons = tasklist_buttons
     }
-
-    -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s })
-
-    -- Add widgets to the wibox
-    s.mywibox:setup {
-        layout = wibox.layout.align.horizontal,
-        { -- Left widgets
-            layout = wibox.layout.fixed.horizontal,
-            mylauncher,
-            s.mytaglist,
-            s.mypromptbox,
-        },
-        s.mytasklist, -- Middle widget
-        { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
-            wibox.widget.systray(),
-            mytextclock,
-            s.mylayoutbox,
-        }
-    }   
-end)
 -- }}}
 
 -- {{{ Mouse bindings
@@ -235,7 +222,13 @@ root.buttons(gears.table.join(
 -- {{{ Key bindings
 globalkeys = gears.table.join(
 -- Swidch keyboard
-    awful.key({ modkey }, " ", function () mykeyboardlayout.next_layout(); end),
+awful.key({ modkey }, " ", function ()
+    -- Мы не меняем язык через Awesome, мы просто просим виджет обновиться
+    -- после того, как система (setxkbmap) сменит язык
+    gears.timer.delayed_call(function()
+        statusbar.update_layout()
+    end)
+end),
 -- Screen Light 
     awful.key({ "Shift" }, "XF86AudioRaiseVolume", function () awful.spawn.with_shell("brightnessctl s 11%+") end),
     awful.key({ "Shift" }, "XF86AudioLowerVolume", function ()  awful.spawn.with_shell("brightnessctl s 11%-") end),

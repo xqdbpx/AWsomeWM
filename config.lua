@@ -10,10 +10,17 @@ local apps = {
   Launcher = "rofi"
 }
 
+local utils = {
+  keyboard = "setxkbmap -layout 'us,ru' -option 'grp:win_space_toggle'",
+  wifi = "nm-applet",
+  picom = "picom",
+  gestures= "libinput-gestures-setup start",
+}
 apps.Editor_cmd = apps.Terminal .. " -e " .. apps.Editor 
 
 local config = {
-    apps = apps
+    apps = apps,
+    utils = utils
   }
 
 return config
