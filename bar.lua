@@ -1,23 +1,32 @@
 local gears = require("gears")
 local awful = require("awful")
 local wibox = require("wibox")
-
 local statusbar = {}
 
 
--- 1. Создаем виджет индикатора
+-- 1. Wiget Board
 statusbar.layout_indicator = wibox.widget.textbox()
 statusbar.layout_indicator:set_text(" US ") -- Начальное значение
 
--- 2. Функция обновления (вызывается извне)
 function statusbar.update_layout()
-    awful.spawn.easy_async_with_shell("setxkbmap -query | grep layout | awk '{print $2}'", function(stdout)
+    awful.spawn.easy_async_with_shell("xkblayout-state print '%s'", function(stdout)
         local layout = stdout:gsub("%s+", ""):upper()
+        if layout ~= "" then
         statusbar.layout_indicator:set_text(" " .. layout .. " ")
-    end)
+      end
+  end)
 end
 
--- 3. Функция создания самой панели (Wibar)
+gears.timer {
+    timeout = 0.3,
+    autostart = true,
+    call_now = true,
+    callback = function()
+      statusbar.update_layout()
+    end
+}
+mytextclock = wibox.widget.textclock("%H:%M")
+-- 3. (Wibar)
 function statusbar.setup(s)
     s.mywibox = awful.wibar({ position = "top", screen = s })
 
@@ -30,10 +39,10 @@ function statusbar.setup(s)
         s.mytasklist, -- Центр
         { -- Право
             layout = wibox.layout.fixed.horizontal,
-            statusbar.layout_indicator, -- Наш индикатор
+            statusbar.layout_indicator,
             wibox.widget.systray(),
-            wibox.widget.textclock(),
-            s.mylayoutbox,
+            mytextclock,
+            s.mylayoutbox
         },
     }
 end

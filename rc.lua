@@ -120,8 +120,6 @@ menubar.utils.terminal = apps.Terminal -- Set the terminal for applications that
 
 
 -- {{{ Wibar
--- Create a textclock widget
-mytextclock = wibox.widget.textclock("%H:%M")
 
 -- Create a wibox for each screen and add it !!!
 local taglist_buttons = gears.table.join(
@@ -178,10 +176,9 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
-awful.screen.connect_for_each_screen(function(s)
+awful.screen.connect_for_each_screen(function(s) 
     -- Wallpaper
-    set_wallpaper(s)
-    statusbar.setup(s)
+  
     -- Each screen has its own tag table.
     awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 
@@ -202,12 +199,9 @@ awful.screen.connect_for_each_screen(function(s)
         buttons = taglist_buttons
     }
 
-    -- Create a tasklist widget
-    s.mytasklist = awful.widget.tasklist {
-        screen  = s,
-        filter  = awful.widget.tasklist.filter.currenttags,
-        buttons = tasklist_buttons
-    }
+    set_wallpaper(s)
+    statusbar.setup(s)
+  end)
 -- }}}
 
 -- {{{ Mouse bindings
@@ -221,14 +215,6 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
--- Swidch keyboard
-awful.key({ modkey }, " ", function ()
-    -- Мы не меняем язык через Awesome, мы просто просим виджет обновиться
-    -- после того, как система (setxkbmap) сменит язык
-    gears.timer.delayed_call(function()
-        statusbar.update_layout()
-    end)
-end),
 -- Screen Light 
     awful.key({ "Shift" }, "XF86AudioRaiseVolume", function () awful.spawn.with_shell("brightnessctl s 11%+") end),
     awful.key({ "Shift" }, "XF86AudioLowerVolume", function ()  awful.spawn.with_shell("brightnessctl s 11%-") end),
@@ -283,7 +269,7 @@ end),
     awful.key({ modkey, "Shift" }, "w", function() awful.spawn(apps.Browser2) end,
               {description = "open two brouser", group = "launcher"}),
     
-    awful.key({ modkey, "Mod1" }, "w", function() awful.spawn(DevBrowser) end,
+    awful.key({ modkey, "Mod1" }, "w", function() awful.spawn(apps.DevBrowser) end,
               {description = "open dev brouser", group = "launcher"}),
     awful.key({modkey}, "c", function() awful.spawn(IDE) end,
               {description = "My IDE", group= "launcher"}),
@@ -299,9 +285,10 @@ end),
               {description = "decrease master width factor", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true) end,
               {description = "increase the number of master clients", group = "layout"}),
-    awful.key({ modkey, "Shift", "Ctrl"  }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
+    awful.key({ modkey,  "Ctrl"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
               {description = "decrease the number of master clients", group = "layout"}),
-    awful.key({ modkey, "Control", "Ctrl" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
+    awful.key({ modkey, "Ctrl"    }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
+
               {description = "increase the number of columns", group = "layout"}),
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
@@ -536,3 +523,4 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
