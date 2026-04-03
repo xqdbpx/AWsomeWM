@@ -1,8 +1,8 @@
-local Modkeysi = {
-  local modkey = "Mod4",
-  local alt = "Mod1",
-  local shift = "Shift",
-  local ctrl = "Control"
+local modkey = {
+   modkey = "Mod4",
+   alt = "Mod1",
+   shift = "Shift",
+   ctrl = "Control"
 }
 
 local Fkeys = {
@@ -20,4 +20,4 @@ local Fkeys = {
   F12 = "F12"
 }
 
-return {Modkey, Fkeys}
+return {modkey, Fkeys}

@@ -1,12 +1,10 @@
 local gears = require("gears")
 local awful = require("awful")
 local wibox = require("wibox")
-local config = require("config")
 local beautiful = require("beautiful")
 
 local statusbar = {}
 
-local apps= config.apps
 
 -- 1. Wiget Board
 statusbar.layout_indicator = wibox.widget.textbox(" US ")
@@ -20,6 +18,10 @@ function statusbar.update_layout()
       end
     end)
 end
+
+-- Menubar configuration
+menubar.utils.terminal = apps.Terminal -- Set the terminal for applications that require it
+-- }}}
 
 gears.timer {
   timeout = 0.3,
