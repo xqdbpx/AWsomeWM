@@ -11,15 +11,19 @@ require("awful.autofocus")
 local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
+local config = require("config")
 require("bar")
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- Menu Aps Init
-local config = require("config")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
-require("binds")
+M = require("binds")
 
+modkey = M.modkey
+alt = M.alt
+shift = M.shift
+ctrl = M.ctrl
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
