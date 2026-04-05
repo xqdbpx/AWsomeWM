@@ -12,19 +12,13 @@ local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local config = require("config")
-require("bar")
+bar = require("bar")
+require ("binds.keybinds")
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- Menu Aps Init
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
-M = require("binds")
-
-modkey = M.modkey
-alt = M.alt
-shift = M.shift
-ctrl = M.ctrl
-
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -51,6 +45,10 @@ end
 -- }}}
 -- add utisl class 
 local utils = config.utils
+
+
+
+--
 --AutoRun utils and app
 AutoToolRun(utils.keyboard)
 AutoTuulRun(utils.gestures)
@@ -121,7 +119,7 @@ awful.screen.connect_for_each_screen(function(s)
     -- Each screen has its own tag table.
 
     set_wallpaper(s)
-    statusbar.setup(s)
+    bar.setup(s)
   end)
 -- }}}
 
