@@ -1,14 +1,13 @@
 local awful= require("awful")
 local naughty= require("naughty")
-local hotkeys_popup = require("awful.popup")
+local hotkeys_popup = require("awful.hotkeys_popup")
 
-
+--APPS 
 local config= require("config")                                                                                       
 local apps = config.apps
-
-local MKeys = require("binds.Mkeys")
+--KEY
+local modkeys = require("binds.modkeys")
 local modkey, alt, ctrl, shift = table.unpack(modkeys)
-local F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12 = table.unpack(Fkeys)
 
 
 -- {{{ Key bindings
@@ -22,9 +21,8 @@ awful.keyboard.append_global_keybindings{
     awful.key({modkey, "Mod1"}, "m", function () awful.spawn("wpctl set-mute @DEFAULT_SINK@ toggle") end),
   }
 
-
 awful.keyboard.append_global_keybindings{
-    awful.key({ modkey,           }, "s",      hotkeys_popup.show_help
+    awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey, shift   }, "h",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
@@ -73,7 +71,7 @@ awful.keyboard.append_global_keybindings{
     
     awful.key({ modkey, alt }, "w", function() awful.spawn(apps.DevBrowser) end,
               {description = "open dev brouser", group = "launcher"}),
-    awful.key({modkey}, "c", function() awful.spawn(IDE) end,
+    awful.key({modkey}, "c", function() awful.spawn(apps.IDE) end,
               {description = "My IDE", group= "launcher"}),
     }
 

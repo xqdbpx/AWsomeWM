@@ -1,7 +1,13 @@
 local gears = require("gears")
 local awful = require("awful")
 local wibox = require("wibox")
+local menubar = require("menubar")
 local beautiful = require("beautiful")
+
+
+local config = require("config")
+local apps = config.apps
+
 
 local statusbar = {}
 
@@ -63,7 +69,6 @@ s.mypromptbox = awful.widget.prompt()
     s.mytaglist = awful.widget.taglist {
         screen  = s,
         filter  = awful.widget.taglist.filter.all,
-        buttons = taglist_buttons
     }
 
     -- Processe list

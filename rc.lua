@@ -11,8 +11,6 @@ require("awful.autofocus")
 local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
-local menubar = require("menubar")
-require("binds")
 require("bar")
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
@@ -20,6 +18,8 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 local config = require("config")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
+require("binds")
+
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -47,14 +47,9 @@ end
 -- }}}
 -- add utisl class 
 local utils = config.utils
--- AutoRunScrypt for utils{
-function first_run(cmd)
-  local findme = cmd:match("%S+")
-  awful.spawn.with_shell(string.format("pgrep -u $USER -x %s > /dev/null || (%s)", findme, cmd))
-end
 --AutoRun utils and app
-first_run(utils.keyboard)
-first_run(utils.gestures)
+AutoToolRun(utils.keyboard)
+AutoTuulRun(utils.gestures)
 -- }
 
 -- {{{ Variable definitions

@@ -10,6 +10,11 @@ local apps = {
   Launcher = "rofi"
 }
 
+local function AutoTollRun(cmd)
+  local findme = cmd:match("%S+")
+  awful.spawn.with_shell(string.format("pgrep -u $USER -x %s > /dev/null || (%s)", findme, cmd))
+end
+
 local utils = {
   keyboard = "setxkbmap -layout 'us,ru' -option 'grp:win_space_toggle'",
   wifi = "nm-applet",
@@ -20,7 +25,8 @@ apps.Editor_cmd = apps.Terminal .. " -e " .. apps.Editor
 
 local config = {
     apps = apps,
-    utils = utils
+    utils = utils,
+    AutoTollrun()
   }
 
 return config
